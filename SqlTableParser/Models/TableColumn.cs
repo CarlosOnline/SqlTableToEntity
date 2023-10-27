@@ -56,14 +56,20 @@ public class TableColumn
     /// </summary>
     public string Sql { get; set; }
 
-    [JsonIgnore]
-    internal bool IsPrimaryKeyExplicit { get; set; }
+    /// <summary>
+    /// Is primary key explicit.
+    /// </summary>
+    public bool IsPrimaryKeyExplicit { get; set; }
 
-    [JsonIgnore]
-    internal bool IsIdentityColumnExplicit { get; set; }
+    /// <summary>
+    /// Is identity column explicit.
+    /// </summary>
+    public bool IsIdentityColumnExplicit { get; set; }
 
-    [JsonIgnore]
-    internal SqlConstraintType SqlContraintType { get; set; }
+    /// <summary>
+    /// Sql constraint.
+    /// </summary>
+    public SqlConstraintType SqlContraintType { get; set; }
 
     /// <summary>
     /// Tells whether or not the column has an identity constraint.

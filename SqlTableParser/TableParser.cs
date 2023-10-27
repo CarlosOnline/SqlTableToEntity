@@ -141,13 +141,14 @@ public class TableParser
 
                 case SqlColumnDefinition definition:
                     {
-                        var column = ProcessColumn(definition);
+                        var column = ProcessColumn(definition, table);
                         table.Columns.Add(column);
                     }
                     break;
 
                 case SqlPrimaryKeyConstraint constraint:
-                    table.PrimaryKeyColumns = GetPrimaryKeyColumns(constraint);
+                    table.PrimaryKeyColumns.AddRange(GetPrimaryKeyColumns(constraint));
+                    table.PrimaryKeyColumns = table.PrimaryKeyColumns.OrderBy(item => item).Distinct().ToList();
                     break;
 
                 case SqlConstraint _:
@@ -184,7 +185,7 @@ public class TableParser
         return results;
     }
 
-    private TableColumn ProcessColumn(SqlColumnDefinition definition)
+    private TableColumn ProcessColumn(SqlColumnDefinition definition, Table table)
     {
         DebugLog($"{definition.DataType.DataType.ObjectIdentifier.GetValue()} {definition.Name} {definition.Sql}");
 
@@ -209,6 +210,20 @@ public class TableParser
 
                 case SqlColumnIdentity _:
                     column.IsIdentityColumnExplicit = true;
+                    break;
+
+                case SqlPrimaryKeyConstraint constraint:
+                    if (constraint.IndexedColumns?.Count > 0)
+                    {
+                        table.PrimaryKeyColumns.AddRange(constraint.IndexedColumns.Select(item => item.Name.Value));
+                        table.PrimaryKeyColumns = table.PrimaryKeyColumns.OrderBy(item => item).Distinct().ToList();
+                    }
+                    else if (constraint.Children.Count() == 0)
+                    {
+                        column.IsPrimaryKeyExplicit = true;
+                        table.PrimaryKeyColumns.Add(column.Name);
+                        table.PrimaryKeyColumns = table.PrimaryKeyColumns.OrderBy(item => item).Distinct().ToList();
+                    }
                     break;
 
                 case SqlConstraint constraint:

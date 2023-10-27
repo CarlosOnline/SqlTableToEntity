@@ -6,10 +6,18 @@ using System.IO;
 
 namespace SqlRazorGenerator;
 
+/// <summary>
+/// Razor generator.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class RazorGenerator<T> where T : class, new()
 {
     private IRazorEngineCompiledTemplate<TemplateModel<T>> template;
 
+    /// <summary>
+    /// Razor generator constructor.
+    /// </summary>
+    /// <param name="templateFilePath">Template file path.</param>
     public RazorGenerator(string templateFilePath)
     {
         this.template = CompileTemplate(templateFilePath);
@@ -36,10 +44,17 @@ public class RazorGenerator<T> where T : class, new()
         });
     }
 
-    public string Generate(T model)
+    /// <summary>
+    /// Generate contents from model.
+    /// </summary>
+    /// <param name="model">Model data.</param>
+    /// <param name="databaseName">Database name.</param>
+    /// <returns></returns>
+    public string Generate(T model, string databaseName)
     {
         return this.template.Run(instance => {
             instance.Model = model;
+            instance.Database = databaseName;
             instance.EnvironmentVariables = GetEnvironmentVariables();
         });
     }

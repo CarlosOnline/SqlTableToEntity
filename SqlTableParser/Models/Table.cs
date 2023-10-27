@@ -34,6 +34,16 @@ public class Table
     public List<string> PrimaryKeyColumns { get; set; } = new List<string>();
 
     /// <summary>
+    /// Has multiple primary keys.
+    /// </summary>
+    public bool MultiplePrimaryKeys => PrimaryKeyColumns.Count > 1;
+
+    /// <summary>
+    /// Has identity column.
+    /// </summary>
+    public bool HasIdentityColumn => Columns.Any(item => item.IsIdentity);
+
+    /// <summary>
     /// Source file path.
     /// </summary>
     public string SourceFilePath { get; set; }
@@ -102,6 +112,26 @@ public class Table
     public bool ContainsPrimaryKey()
     {
         return Columns.Any(item => item.IsPrimaryKey);
+    }
+
+    /// <summary>
+    /// Check if column is an Id column.
+    /// </summary>
+    /// <param name="name">Name of column.</param>
+    /// <returns>True if column is the Id column.</returns>
+    public bool IsIdColumn(string name)
+    {
+        var column = Columns.FirstOrDefault(item => string.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase));
+        if (MultiplePrimaryKeys && HasIdentityColumn)
+        {
+            return column.IsIdentity;
+        }
+        else if (MultiplePrimaryKeys && !HasIdentityColumn)
+        {
+            return string.Equals(column.Name, PrimaryKeyColumns[0], StringComparison.OrdinalIgnoreCase);
+        }
+
+        return column.IsPrimaryKey;
     }
 
     /// <summary>

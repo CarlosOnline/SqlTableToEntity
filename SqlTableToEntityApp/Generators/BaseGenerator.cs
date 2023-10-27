@@ -14,10 +14,13 @@ namespace SqlTableToEntityApp.Generators
 
         protected string outputFilePath { get; set; }
 
+        protected string databaseName { get; set; }
+
         protected IEnumerable<Table> tables;
 
-        public BaseGenerator(string templateFilePath, IEnumerable<Table> tables, string outputFilePath)
+        public BaseGenerator(string templateFilePath, IEnumerable<Table> tables, string databaseName, string outputFilePath)
         {
+            this.databaseName = databaseName;
             this.tables = tables;
             this.outputFilePath = outputFilePath;
             this.entityGenerator = new RazorGenerator<T>(templateFilePath);
@@ -25,7 +28,7 @@ namespace SqlTableToEntityApp.Generators
 
         protected string GetOutputFilePath(Table table)
         {
-            return GeneratorUtility.GetOutputFilePath(table, this.outputFilePath);
+            return GeneratorUtility.GetOutputFilePath(table, this.databaseName, this.outputFilePath);
         }
     }
 }

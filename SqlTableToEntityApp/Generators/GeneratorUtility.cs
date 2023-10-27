@@ -7,9 +7,11 @@ internal class GeneratorUtility
 {
     static ILogger Logger => Log.Logger;
 
-    public static string GetOutputFilePath(Table table, string outputPath)
+    public static string GetOutputFilePath(Table table, string databaseName, string outputPath)
     {
-        var outputFilePath = outputPath.Replace("{Schema}", table.Schema)
+        var outputFilePath = outputPath
+            .Replace("{Database}", databaseName)
+            .Replace("{Schema}", table.Schema)
             .Replace("{Table}", table.Name);
 
         if (Directory.Exists(outputFilePath))
@@ -20,8 +22,11 @@ internal class GeneratorUtility
         return outputFilePath;
     }
 
-    public static void WriteOutputFile(string contents, string outputFilePath)
+    public static void WriteOutputFile(string contents, string databaseName, string outputFilePath)
     {
+        outputFilePath = outputFilePath.Replace("{Database}", databaseName);
+
+        contents = contents.Replace("\r\n}", "}");
         Directory.CreateDirectory(Path.GetDirectoryName(outputFilePath));
         File.WriteAllText(outputFilePath, contents);
 

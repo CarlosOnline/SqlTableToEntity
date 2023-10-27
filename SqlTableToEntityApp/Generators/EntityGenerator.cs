@@ -4,8 +4,8 @@ namespace SqlTableToEntityApp.Generators;
 
 internal class EntityGenerator : BaseGenerator<Table>
 {
-    public EntityGenerator(string templateFilePath, IEnumerable<Table> tables, string outputFilePath) :
-        base(templateFilePath, tables, outputFilePath)
+    public EntityGenerator(string templateFilePath, IEnumerable<Table> tables, string databaseName, string outputFilePath) :
+        base(templateFilePath, tables, databaseName, outputFilePath)
     {
     }
 
@@ -13,11 +13,11 @@ internal class EntityGenerator : BaseGenerator<Table>
     {
         foreach (var table in this.tables)
         {
-            var contents = entityGenerator.Generate(table);
+            var contents = entityGenerator.Generate(table, this.databaseName);
             Logger.Debug(contents);
 
             var outputFilePath = GetOutputFilePath(table);
-            GeneratorUtility.WriteOutputFile(contents, outputFilePath);
+            GeneratorUtility.WriteOutputFile(contents, databaseName, outputFilePath);
         }
     }
 }
