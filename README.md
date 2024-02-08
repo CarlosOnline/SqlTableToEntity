@@ -73,7 +73,7 @@ Options:
 - The `Entity` razor template Model variable `@Model` is of type: [Table](#T-SqlTableParser-Models-Table 'SqlTableParser.Models.Table').
 - The `Context` razor template Model variable `@Model` is of type: [List\<Table\>](#T-SqlTableParser-Models-Table 'SqlTableParser.Models.Table').
 
-For example to render the table name use `@Model.Name`, use `@Model.Schema` to render the table schema name.  Use `@Database`` to render the database name which comes from `-database-name` command line parameter.
+For example to render the table name use `@Model.Name`, use `@Model.Schema` to render the table schema name.  Use `@Database` to render the database name which comes from `-database-name` command line parameter.
 
 ---
 
