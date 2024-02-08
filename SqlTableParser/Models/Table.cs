@@ -59,6 +59,31 @@ public class Table
     public string SourceFileName => Path.GetFileName(SourceFilePath);
 
     /// <summary>
+    /// Source file name without extension.
+    /// </summary>
+    public string SourceBaseFileName => Path.GetFileNameWithoutExtension(SourceFilePath);
+
+    /// <summary>
+    /// Output file path.
+    /// </summary>
+    public string OutputFilePath { get; set; }
+
+    /// <summary>
+    /// Output folder path.
+    /// </summary>
+    public string OutputFolder => Path.GetDirectoryName(OutputFilePath);
+
+    /// <summary>
+    /// Output file name.
+    /// </summary>
+    public string OutputFileName => Path.GetFileName(OutputFilePath);
+
+    /// <summary>
+    /// Output file name without extension.
+    /// </summary>
+    public string OutputBaseFileName => Path.GetFileNameWithoutExtension(OutputFilePath);
+
+    /// <summary>
     /// Original table sql.
     /// </summary>
     public string Sql { get; set; }

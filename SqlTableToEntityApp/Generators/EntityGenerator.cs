@@ -13,10 +13,12 @@ internal class EntityGenerator : BaseGenerator<Table>
     {
         foreach (var table in this.tables)
         {
+            var outputFilePath = GetOutputFilePath(table);
+            table.OutputFilePath = outputFilePath;
+
             var contents = entityGenerator.Generate(table, this.databaseName);
             Logger.Debug(contents);
 
-            var outputFilePath = GetOutputFilePath(table);
             GeneratorUtility.WriteOutputFile(contents, databaseName, outputFilePath);
         }
     }
